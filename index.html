@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Market Analysis Tool</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <style>
         #loading {
             display: none;
@@ -13,6 +14,22 @@
         #error {
             display: none;
             color: red;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        canvas {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -32,17 +49,22 @@
 
     <div id="loading">Fetching data...</div>
     <div id="error">An error occurred while fetching data.</div>
+    <div id="results">
+        <!-- Results will be displayed here -->
+    </div>
     <canvas id="stockChart"></canvas>
 
     <script>
+        let myChart = null;
+
         function fetchStockData() {
             const symbol = document.getElementById('symbol').value || 'AAPL';
             const start_date = document.getElementById('start_date').value || '2020-01-01';
             const end_date = document.getElementById('end_date').value || '2022-01-01';
-
+            
             document.getElementById('loading').style.display = 'block';
             document.getElementById('error').style.display = 'none';
-
+            
             fetch(`/stockdata?symbol=${symbol}&start_date=${start_date}&end_date=${end_date}`)
                 .then(response => {
                     document.getElementById('loading').style.display = 'none';
@@ -52,73 +74,85 @@
                     return response.json();
                 })
                 .then(data => {
-                    const labels = Object.keys(data);
-                    const datasets = {
-                        open: labels.map(date => data[date].Open),
-                        high: labels.map(date => data[date].High),
-                        low: labels.map(date => data[date].Low),
-                        close: labels.map(date => data[date].Close),
-                        sma: labels.map(date => data[date].SMA),
-                        upperBB: labels.map(date => data[date].UpperBB),
-                        lowerBB: labels.map(date => data[date].LowerBB),
-                        rsi: labels.map(date => data[date].RSI)
-                    };
+                    if(Object.keys(data).length === 0) {
+                        document.getElementById('results').innerText = 'No data available for the given dates or stock symbol.';
+                    } else {
+                        const labels = Object.keys(data);
+                        const openData = labels.map(label => data[label].Open);
+                        const highData = labels.map(label => data[label].High);
+                        const lowData = labels.map(label => data[label].Low);
+                        const closeData = labels.map(label => data[label].Close);
+                        const smaData = labels.map(label => data[label].SMA);
+                        const upperBBData = labels.map(label => data[label].UpperBB);
+                        const lowerBBData = labels.map(label => data[label].LowerBB);
+                        const rsiData = labels.map(label => data[label].RSI);
 
-                    const ctx = document.getElementById('stockChart').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Open',
-                                data: datasets.open,
-                                borderColor: 'blue',
-                                fill: false
-                            }, {
-                                label: 'High',
-                                data: datasets.high,
-                                borderColor: 'green',
-                                fill: false
-                            }, {
-                                label: 'Low',
-                                data: datasets.low,
-                                borderColor: 'red',
-                                fill: false
-                            }, {
-                                label: 'Close',
-                                data: datasets.close,
-                                borderColor: 'orange',
-                                fill: false
-                            }, {
-                                label: 'SMA',
-                                data: datasets.sma,
-                                borderColor: 'purple',
-                                fill: false
-                            }, {
-                                label: 'UpperBB',
-                                data: datasets.upperBB,
-                                borderColor: 'pink',
-                                fill: false
-                            }, {
-                                label: 'LowerBB',
-                                data: datasets.lowerBB,
-                                borderColor: 'cyan',
-                                fill: false
-                            }, {
-                                label: 'RSI',
-                                data: datasets.rsi,
-                                borderColor: 'black',
-                                fill: false
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                x: {
-                                    type: 'timeseries'
+                        const ctx = document.getElementById('stockChart').getContext('2d');
+                        
+                        // Destroy the previous chart if it exists
+                        if (myChart) {
+                            myChart.destroy();
+                        }
+
+                        // Create a new chart
+                        myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Open',
+                                    data: openData,
+                                    borderColor: 'blue',
+                                    fill: false
+                                }, {
+                                    label: 'High',
+                                    data: highData,
+                                    borderColor: 'green',
+                                    fill: false
+                                }, {
+                                    label: 'Low',
+                                    data: lowData,
+                                    borderColor: 'red',
+                                    fill: false
+                                }, {
+                                    label: 'Close',
+                                    data: closeData,
+                                    borderColor: 'black',
+                                    fill: false
+                                }, {
+                                    label: 'SMA',
+                                    data: smaData,
+                                    borderColor: 'cyan',
+                                    fill: false
+                                }, {
+                                    label: 'UpperBB',
+                                    data: upperBBData,
+                                    borderColor: 'magenta',
+                                    fill: false
+                                }, {
+                                    label: 'LowerBB',
+                                    data: lowerBBData,
+                                    borderColor: 'yellow',
+                                    fill: false
+                                }, {
+                                    label: 'RSI',
+                                    data: rsiData,
+                                    borderColor: 'orange',
+                                    fill: false
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    x: {
+                                        type: 'timeseries',
+                                    },
+                                    y: {
+                                        beginAtZero: true
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 })
                 .catch(error => {
                     document.getElementById('loading').style.display = 'none';
@@ -129,4 +163,3 @@
     </script>
 </body>
 </html>
-
