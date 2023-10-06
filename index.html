@@ -77,81 +77,7 @@
                     if(Object.keys(data).length === 0) {
                         document.getElementById('results').innerText = 'No data available for the given dates or stock symbol.';
                     } else {
-                        const labels = Object.keys(data);
-                        const openData = labels.map(label => data[label].Open);
-                        const highData = labels.map(label => data[label].High);
-                        const lowData = labels.map(label => data[label].Low);
-                        const closeData = labels.map(label => data[label].Close);
-                        const smaData = labels.map(label => data[label].SMA);
-                        const upperBBData = labels.map(label => data[label].UpperBB);
-                        const lowerBBData = labels.map(label => data[label].LowerBB);
-                        const rsiData = labels.map(label => data[label].RSI);
-
-                        const ctx = document.getElementById('stockChart').getContext('2d');
-                        
-                        // Destroy the previous chart if it exists
-                        if (myChart) {
-                            myChart.destroy();
-                        }
-
-                        // Create a new chart
-                        myChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: 'Open',
-                                    data: openData,
-                                    borderColor: 'blue',
-                                    fill: false
-                                }, {
-                                    label: 'High',
-                                    data: highData,
-                                    borderColor: 'green',
-                                    fill: false
-                                }, {
-                                    label: 'Low',
-                                    data: lowData,
-                                    borderColor: 'red',
-                                    fill: false
-                                }, {
-                                    label: 'Close',
-                                    data: closeData,
-                                    borderColor: 'black',
-                                    fill: false
-                                }, {
-                                    label: 'SMA',
-                                    data: smaData,
-                                    borderColor: 'cyan',
-                                    fill: false
-                                }, {
-                                    label: 'UpperBB',
-                                    data: upperBBData,
-                                    borderColor: 'magenta',
-                                    fill: false
-                                }, {
-                                    label: 'LowerBB',
-                                    data: lowerBBData,
-                                    borderColor: 'yellow',
-                                    fill: false
-                                }, {
-                                    label: 'RSI',
-                                    data: rsiData,
-                                    borderColor: 'orange',
-                                    fill: false
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    x: {
-                                        type: 'timeseries',
-                                    },
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
+                        renderChart(data);
                     }
                 })
                 .catch(error => {
@@ -160,6 +86,74 @@
                     console.error("There was a problem fetching stock data:", error);
                 });
         }
+
+        function renderChart(data) {
+            const labels = Object.keys(data);
+
+            // Prepare data for chart
+            const datasets = [
+                { label: 'Open', data: labels.map(date => data[date].Open), borderColor: 'blue', fill: false },
+                { label: 'High', data: labels.map(date => data[date].High), borderColor: 'green', fill: false },
+                { label: 'Low', data: labels.map(date => data[date].Low), borderColor: 'red', fill: false },
+                { label: 'Close', data: labels.map(date => data[date].Close), borderColor: 'orange', fill: false },
+                { label: 'SMA', data: labels.map(date => data[date].SMA), borderColor: 'purple', fill: false, hidden: true },
+                { label: 'UpperBB', data: labels.map(date => data[date].UpperBB), borderColor: 'cyan', fill: false, hidden: true },
+                { label: 'LowerBB', data: labels.map(date => data[date].LowerBB), borderColor: 'pink', fill: false, hidden: true },
+                { label: 'RSI', data: labels.map(date => data[date].RSI), borderColor: 'brown', fill: false, hidden: true }
+            ];
+
+            if (myChart) {
+                myChart.destroy(); // destroy previous chart instance if it exists
+            }
+
+            // Create new chart
+            const ctx = document.getElementById('stockChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'timeseries',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    day: 'MMM D'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Value'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
+
