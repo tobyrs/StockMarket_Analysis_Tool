@@ -9,14 +9,9 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route('/')
-def index():
+def serve_homepage():
     with open('index.html', 'r') as f:
         return f.read()
-
-
-@app.route('/')
-def index():
-    return "Welcome to the Stock Market Analysis Tool! Use /stockdata endpoint to get stock data."
 
 @app.route('/stockdata', methods=['GET'])
 def get_stock_data():
