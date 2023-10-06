@@ -1,40 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Market Analysis Tool</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         #loading {
             display: none;
             color: blue;
         }
-
         #error {
             display: none;
             color: red;
         }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
     </style>
 </head>
-
 <body>
     <h1>Stock Market Analysis Tool</h1>
 
@@ -51,9 +32,7 @@
 
     <div id="loading">Fetching data...</div>
     <div id="error">An error occurred while fetching data.</div>
-    <div id="results">
-        <!-- Results will be displayed here -->
-    </div>
+    <canvas id="stockChart"></canvas>
 
     <script>
         function fetchStockData() {
@@ -73,27 +52,73 @@
                     return response.json();
                 })
                 .then(data => {
-                    if (Object.keys(data).length === 0) {
-                        document.getElementById('results').innerText = 'No data available for the given dates or stock symbol.';
-                    } else {
-                        let tableHTML = '<table>';
-                        tableHTML += '<tr><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>SMA</th><th>UpperBB</th><th>LowerBB</th><th>RSI</th></tr>';
-                        for (let date in data) {
-                            tableHTML += `<tr>
-                                <td>${date}</td>
-                                <td>${data[date].Open ? data[date].Open.toFixed(2) : 'N/A'}</td>
-                                <td>${data[date].High ? data[date].High.toFixed(2) : 'N/A'}</td>
-                                <td>${data[date].Low ? data[date].Low.toFixed(2) : 'N/A'}</td>
-                                <td>${data[date].Close ? data[date].Close.toFixed(2) : 'N/A'}</td>
-                                <td>${data[date].SMA ? data[date].SMA.toFixed(2) : 'N/A'}</td>
-                                <td>${data[date].UpperBB ? data[date].UpperBB.toFixed(2) : 'N/A'}</td>
-                                <td>${data[date].LowerBB ? data[date].LowerBB.toFixed(2) : 'N/A'}</td>
-                                <td>${data[date].RSI ? data[date].RSI.toFixed(2) : 'N/A'}</td>
-                            </tr>`;
+                    const labels = Object.keys(data);
+                    const datasets = {
+                        open: labels.map(date => data[date].Open),
+                        high: labels.map(date => data[date].High),
+                        low: labels.map(date => data[date].Low),
+                        close: labels.map(date => data[date].Close),
+                        sma: labels.map(date => data[date].SMA),
+                        upperBB: labels.map(date => data[date].UpperBB),
+                        lowerBB: labels.map(date => data[date].LowerBB),
+                        rsi: labels.map(date => data[date].RSI)
+                    };
+
+                    const ctx = document.getElementById('stockChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Open',
+                                data: datasets.open,
+                                borderColor: 'blue',
+                                fill: false
+                            }, {
+                                label: 'High',
+                                data: datasets.high,
+                                borderColor: 'green',
+                                fill: false
+                            }, {
+                                label: 'Low',
+                                data: datasets.low,
+                                borderColor: 'red',
+                                fill: false
+                            }, {
+                                label: 'Close',
+                                data: datasets.close,
+                                borderColor: 'orange',
+                                fill: false
+                            }, {
+                                label: 'SMA',
+                                data: datasets.sma,
+                                borderColor: 'purple',
+                                fill: false
+                            }, {
+                                label: 'UpperBB',
+                                data: datasets.upperBB,
+                                borderColor: 'pink',
+                                fill: false
+                            }, {
+                                label: 'LowerBB',
+                                data: datasets.lowerBB,
+                                borderColor: 'cyan',
+                                fill: false
+                            }, {
+                                label: 'RSI',
+                                data: datasets.rsi,
+                                borderColor: 'black',
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    type: 'timeseries'
+                                }
+                            }
                         }
-                        tableHTML += '</table>';
-                        document.getElementById('results').innerHTML = tableHTML;
-                    }
+                    });
                 })
                 .catch(error => {
                     document.getElementById('loading').style.display = 'none';
@@ -103,5 +128,5 @@
         }
     </script>
 </body>
-
 </html>
+
