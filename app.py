@@ -8,6 +8,10 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/')
+def index():
+    return "Welcome to the Stock Market Analysis Tool! Use /stockdata endpoint to get stock data."
+
 @app.route('/stockdata', methods=['GET'])
 def get_stock_data():
     symbol = request.args.get('symbol', default='AAPL', type=str)
@@ -35,4 +39,5 @@ def get_stock_data():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
+
 
