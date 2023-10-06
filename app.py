@@ -37,6 +37,13 @@ def get_stock_data():
     
     # Convert Timestamp keys to string format for JSON serialization
     data_dict = data.to_dict(orient='index')
+
+    # Handle NaN values
+    for date, values in data_dict.items():
+        for key, value in values.items():
+            if pd.isna(value):
+                values[key] = None  # replacing NaN with None, which gets converted to 'null' in JSON
+
     data_str_keys = {str(k): v for k, v in data_dict.items()}
 
     return jsonify(data_str_keys)
