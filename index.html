@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis Tool</title>
+</head>
+<body>
+    <h1>Stock Analysis Tool</h1>
+    <label for="symbol">Enter Stock Symbol:</label>
+    <input type="text" id="symbol" name="symbol" value="AAPL">
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date" name="start_date" value="2020-01-01">
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date" name="end_date" value="2022-01-01">
+    <button onclick="fetchData()">Analyze</button>
+    <div id="results"></div>
+
+    <script>
+        function fetchData() {
+            const symbol = document.getElementById("symbol").value;
+            const start_date = document.getElementById("start_date").value;
+            const end_date = document.getElementById("end_date").value;
+
+            fetch(`/stockdata?symbol=${symbol}&start_date=${start_date}&end_date=${end_date}`)
+            .then(response => response.json())
+            .then(data => {
+                let html = '<h2>Results:</h2><table border="1"><thead><tr><th>Date</th><th>Close</th><th>SMA</th><th>Upper Bollinger Band</th><th>Lower Bollinger Band</th><th>RSI</th></tr></thead><tbody>';
+                for (const [date, metrics] of Object.entries(data)) {
+                    html += `<tr><td>${date}</td><td>${metrics.Close}</td><td>${metrics.SMA}</td><td>${metrics.UpperBB}</td><td>${metrics.LowerBB}</td><td>${metrics.RSI}</td></tr>`;
+                }
+                html += '</tbody></table>';
+                document.getElementById("results").innerHTML = html;
+            });
+        }
+    </script>
+</body>
+</html>
