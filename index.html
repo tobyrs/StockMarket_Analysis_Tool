@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,25 +10,31 @@
             display: none;
             color: blue;
         }
+
         #error {
             display: none;
             color: red;
         }
+
         table {
             border-collapse: collapse;
             width: 100%;
             margin-top: 20px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
     </style>
 </head>
+
 <body>
     <h1>Stock Market Analysis Tool</h1>
 
@@ -53,10 +60,10 @@
             const symbol = document.getElementById('symbol').value || 'AAPL';
             const start_date = document.getElementById('start_date').value || '2020-01-01';
             const end_date = document.getElementById('end_date').value || '2022-01-01';
-            
+
             document.getElementById('loading').style.display = 'block';
             document.getElementById('error').style.display = 'none';
-            
+
             fetch(`/stockdata?symbol=${symbol}&start_date=${start_date}&end_date=${end_date}`)
                 .then(response => {
                     document.getElementById('loading').style.display = 'none';
@@ -66,13 +73,23 @@
                     return response.json();
                 })
                 .then(data => {
-                    if(Object.keys(data).length === 0) {
+                    if (Object.keys(data).length === 0) {
                         document.getElementById('results').innerText = 'No data available for the given dates or stock symbol.';
                     } else {
                         let tableHTML = '<table>';
                         tableHTML += '<tr><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>SMA</th><th>UpperBB</th><th>LowerBB</th><th>RSI</th></tr>';
-                        for(let date in data) {
-                            tableHTML += `<tr><td>${date}</td><td>${data[date].Open.toFixed(2)}</td><td>${data[date].High.toFixed(2)}</td><td>${data[date].Low.toFixed(2)}</td><td>${data[date].Close.toFixed(2)}</td><td>${data[date].SMA.toFixed(2)}</td><td>${data[date].UpperBB.toFixed(2)}</td><td>${data[date].LowerBB.toFixed(2)}</td><td>${data[date].RSI.toFixed(2)}</td></tr>`;
+                        for (let date in data) {
+                            tableHTML += `<tr>
+                                <td>${date}</td>
+                                <td>${data[date].Open ? data[date].Open.toFixed(2) : 'N/A'}</td>
+                                <td>${data[date].High ? data[date].High.toFixed(2) : 'N/A'}</td>
+                                <td>${data[date].Low ? data[date].Low.toFixed(2) : 'N/A'}</td>
+                                <td>${data[date].Close ? data[date].Close.toFixed(2) : 'N/A'}</td>
+                                <td>${data[date].SMA ? data[date].SMA.toFixed(2) : 'N/A'}</td>
+                                <td>${data[date].UpperBB ? data[date].UpperBB.toFixed(2) : 'N/A'}</td>
+                                <td>${data[date].LowerBB ? data[date].LowerBB.toFixed(2) : 'N/A'}</td>
+                                <td>${data[date].RSI ? data[date].RSI.toFixed(2) : 'N/A'}</td>
+                            </tr>`;
                         }
                         tableHTML += '</table>';
                         document.getElementById('results').innerHTML = tableHTML;
@@ -86,5 +103,5 @@
         }
     </script>
 </body>
-</html>
 
+</html>
