@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Market Analysis Tool</title>
+    <style>
+        #loading {
+            display: none;
+            color: blue;
+        }
+        #error {
+            display: none;
+            color: red;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
     <h1>Stock Market Analysis Tool</h1>
@@ -19,6 +42,8 @@
     <br>
     <button onclick="fetchStockData()">Get Data</button>
 
+    <div id="loading">Fetching data...</div>
+    <div id="error">An error occurred while fetching data.</div>
     <div id="results">
         <!-- Results will be displayed here -->
     </div>
@@ -29,13 +54,37 @@
             const start_date = document.getElementById('start_date').value || '2020-01-01';
             const end_date = document.getElementById('end_date').value || '2022-01-01';
             
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            
             fetch(`/stockdata?symbol=${symbol}&start_date=${start_date}&end_date=${end_date}`)
-                .then(response => response.json())
+                .then(response => {
+                    document.getElementById('loading').style.display = 'none';
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    // For now, let's just display the raw JSON data
-                    document.getElementById('results').innerText = JSON.stringify(data, null, 2);
+                    if(Object.keys(data).length === 0) {
+                        document.getElementById('results').innerText = 'No data available for the given dates or stock symbol.';
+                    } else {
+                        let tableHTML = '<table>';
+                        tableHTML += '<tr><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>SMA</th><th>UpperBB</th><th>LowerBB</th><th>RSI</th></tr>';
+                        for(let date in data) {
+                            tableHTML += `<tr><td>${date}</td><td>${data[date].Open.toFixed(2)}</td><td>${data[date].High.toFixed(2)}</td><td>${data[date].Low.toFixed(2)}</td><td>${data[date].Close.toFixed(2)}</td><td>${data[date].SMA.toFixed(2)}</td><td>${data[date].UpperBB.toFixed(2)}</td><td>${data[date].LowerBB.toFixed(2)}</td><td>${data[date].RSI.toFixed(2)}</td></tr>`;
+                        }
+                        tableHTML += '</table>';
+                        document.getElementById('results').innerHTML = tableHTML;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('error').style.display = 'block';
+                    console.error("There was a problem fetching stock data:", error);
                 });
         }
     </script>
 </body>
 </html>
+
