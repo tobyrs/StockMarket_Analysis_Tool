@@ -1,17 +1,16 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import yfinance as yf
 import numpy as np
 import pandas as pd
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 CORS(app)
 
 @app.route('/')
 def serve_homepage():
-    with open('index.html', 'r') as f:
-        return f.read()
+    return render_template('index.html')
 
 @app.route('/stockdata', methods=['GET'])
 def get_stock_data():
@@ -42,7 +41,7 @@ def get_stock_data():
     for date, values in data_dict.items():
         for key, value in values.items():
             if pd.isna(value):
-                values[key] = None  # replacing NaN with None, which gets converted to 'null' in JSON
+                values[key] = None
 
     data_str_keys = {str(k): v for k, v in data_dict.items()}
 
@@ -51,5 +50,6 @@ def get_stock_data():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
+
 
 

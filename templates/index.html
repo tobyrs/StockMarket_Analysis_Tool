@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Analysis Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <h1>Stock Market Analysis Tool</h1>
+
+    <label for="symbol">Stock Symbol:</label>
+    <input type="text" id="symbol" placeholder="e.g. AAPL">
+    <br>
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date">
+    <br>
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date">
+    <br>
+    <button onclick="fetchStockData()">Get Data</button>
+
+    <div id="loading">Fetching data...</div>
+    <div id="error">An error occurred while fetching data.</div>
+    <div id="results"></div>
+    <canvas id="stockChart"></canvas>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+
+
+
