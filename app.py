@@ -34,8 +34,12 @@ def get_stock_data():
     RolDown = dDown.abs().rolling(window=14).mean()
     RS = RolUp / RolDown
     data['RSI'] = 100.0 - (100.0 / (1.0 + RS))
+    
+    # Convert Timestamp keys to string format for JSON serialization
+    data_dict = data.to_dict(orient='index')
+    data_str_keys = {str(k): v for k, v in data_dict.items()}
 
-    return jsonify(data.to_dict(orient='index'))
+    return jsonify(data_str_keys)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
