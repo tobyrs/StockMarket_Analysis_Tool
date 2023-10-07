@@ -8,6 +8,18 @@ import os
 app = Flask(__name__, static_url_path='/static')
 CORS(app)
 
+def add_cross_signals(data):
+    short_window = 50
+    long_window = 200
+    signals = pd.DataFrame(index=data.index)
+    signals['short_mavg'] = data['Close'].rolling(window=short_window, min_periods=1, center=False).mean()
+    signals['long_mavg'] = data['Close'].rolling(window=long_window, min_periods=1, center=False).mean()
+    signals['signal'] = 0.0
+    signals['signal'][short_window:] = np.where(signals['short_mavg'][short_window:] > signals['long_mavg'][short_window:], 1.0, 0.0)   
+    signals['positions'] = signals['signal'].diff()
+    data['GoldenCross'] = np.where(signals['positions'] == 1, data['Close'], np.nan)
+    data['DeathCross'] = np.where(signals['positions'] == -1, data['Close'], np.nan)
+
 @app.route('/')
 def serve_homepage():
     return render_template('index.html')
@@ -34,17 +46,7 @@ def get_stock_data():
     RS = RolUp / RolDown
     data['RSI'] = 100.0 - (100.0 / (1.0 + RS))
     
-    # Golden Cross & Death Cross
-    short_window = 50
-    long_window = 200
-    signals = pd.DataFrame(index=data.index)
-    signals['short_mavg'] = data['Close'].rolling(window=short_window, min_periods=1, center=False).mean()
-    signals['long_mavg'] = data['Close'].rolling(window=long_window, min_periods=1, center=False).mean()
-    signals['signal'] = 0.0
-    signals['signal'][short_window:] = np.where(signals['short_mavg'][short_window:] > signals['long_mavg'][short_window:], 1.0, 0.0)   
-    signals['positions'] = signals['signal'].diff()
-    data['GoldenCross'] = np.where(signals['positions'] == 1, data['Close'], np.nan)
-    data['DeathCross'] = np.where(signals['positions'] == -1, data['Close'], np.nan)
+    add_cross_signals(data)
     
     # Convert Timestamp keys to string format for JSON serialization
     data_dict = data.to_dict(orient='index')
@@ -59,9 +61,44 @@ def get_stock_data():
 
     return jsonify(data_str_keys)
 
+@app.route('/backtest', methods=['GET'])
+def backtest_strategy():
+    symbol = request.args.get('symbol', default='AAPL', type=str)
+    start_date = request.args.get('start_date', default='2020-01-01', type=str)
+    end_date = request.args.get('end_date', default='2022-01-01', type=str)
+
+    data = yf.download(symbol, start=start_date, end=end_date)
+    add_cross_signals(data)
+
+    # Backtesting logic
+    initial_balance = 100000  # Starting with $100,000
+    balance = initial_balance
+    stock_quantity = 0
+    for i in range(1, len(data)):
+        if not np.isnan(data['GoldenCross'][i]):
+            stock_quantity = balance // data['Close'][i]
+            balance -= stock_quantity * data['Close'][i]
+        elif not np.isnan(data['DeathCross'][i]) and stock_quantity > 0:
+            balance += stock_quantity * data['Close'][i]
+            stock_quantity = 0
+
+    # If still holding stocks, sell them at the last price
+    if stock_quantity > 0:
+        balance += stock_quantity * data['Close'].iloc[-1]
+
+    total_profit = balance - initial_balance
+    # [Calculate maximum drawdown and annualized return]
+
+    return jsonify({
+        'totalProfit': total_profit,
+        # 'maxDrawdown': max_drawdown,
+        # 'annualizedReturn': annualized_return
+    })
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
+
 
 
 
