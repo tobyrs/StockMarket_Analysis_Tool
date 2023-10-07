@@ -11,25 +11,25 @@
 <body>
     <h1>Stock Market Analysis Tool</h1>
 
-    <label for="symbol">Stock Symbol:</label>
-    <input type="text" id="symbol" placeholder="e.g. AAPL">
-    <br>
-    <label for="start_date">Start Date:</label>
-    <input type="date" id="start_date">
-    <br>
-    <label for="end_date">End Date:</label>
-    <input type="date" id="end_date">
-    <br>
-    <button onclick="fetchStockData()">Get Data</button>
-
-    <div id="loading" style="display: none;">Fetching data...</div>
-    <div id="error" style="display: none;">An error occurred while fetching data.</div>
+    <div class="input-container">
+        <label for="symbol">Stock Symbol:</label>
+        <input type="text" id="symbol" placeholder="e.g. AAPL">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date">
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date">
+        <button onclick="fetchStockData()">Get Data</button>
+    </div>
+    
+    <div id="loading">Fetching data...</div>
+    <div id="error">An error occurred while fetching data.</div>
     <div id="results"></div>
     <canvas id="stockChart"></canvas>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
+
 
 
 
