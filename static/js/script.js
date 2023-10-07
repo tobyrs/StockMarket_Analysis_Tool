@@ -82,19 +82,16 @@ function renderChart(data) {
                     display: true,
                     position: 'top',
                     labels: {
-                        generateLabels: function(chart) {
-                            const original = Chart.overrides.line.plugins.legend.labels.generateLabels;
-                            const labels = original.call(this, chart);
-                            labels.forEach(label => {
-                                label.text = (label.hidden ? '□ ' : '■ ') + label.text;
-                            });
-                            return labels;
+                        font: {
+                            weight: 'normal'
                         },
-                        onClick: function(e, legendItem, legend) {
-                            const index = legendItem.datasetIndex;
-                            const ci = legend.chart;
-                            ci.data.datasets[index].hidden = !ci.data.datasets[index].hidden;
-                            ci.update();
+                        onHover: function(event, legendItem) {
+                            this.chart.legend.legendItems[legendItem.index].font.weight = 'bold';
+                            this.chart.draw();
+                        },
+                        onLeave: function(event, legendItem) {
+                            this.chart.legend.legendItems[legendItem.index].font.weight = 'normal';
+                            this.chart.draw();
                         }
                     }
                 },
@@ -109,4 +106,3 @@ function renderChart(data) {
         }
     });
 }
-
