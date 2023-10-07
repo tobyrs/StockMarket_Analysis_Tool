@@ -1,0 +1,30 @@
+#loading {
+    display: none;
+    color: blue;
+}
+#error {
+    display: none;
+    color: red;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+canvas {
+    margin-top: 20px;
+}
+
+/* Custom styles for legend hover effect */
+#stockChart canvas:hover .chartjs-legend li:hover {
+    font-weight: bold;
+}
+
