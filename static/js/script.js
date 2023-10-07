@@ -15,12 +15,19 @@ function backTestStrategy() {
             const annualizedReturn = data.annualizedReturn ? `${data.annualizedReturn.toFixed(2)}%` : 'N/A';
             
             resultsDiv.innerHTML = `
+                <strong>Analysis Details:</strong><br>
+                Stock Symbol: ${symbol}<br>
+                Date Range: ${start_date} to ${end_date}<br>
+                Strategy: Golden Cross / Death Cross<br>
+                Starting Balance: $${starting_balance}<br>
+                -----------------------------------<br>
                 Total Profit/Loss: ${totalProfit}<br>
                 Maximum Drawdown: ${maxDrawdown}<br>
                 Annualized Return: ${annualizedReturn}
             `;
         });
 }
+
 
 function fetchStockData() {
     const symbol = document.getElementById('symbol').value || 'AAPL';
