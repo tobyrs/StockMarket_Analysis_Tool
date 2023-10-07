@@ -21,11 +21,31 @@
         <label for="end_date">End Date:</label>
         <input type="date" id="end_date">
         <button onclick="fetchStockData()">Get Data</button>
-        <button onclick="backTestStrategy()">Backtest Strategy</button>
+    </div>
+
+    <!-- Backtesting Configuration Panel -->
+    <div class="backtest-container">
+        <h2>Backtesting Configuration</h2>
+        <label for="strategy">Select Strategy:</label>
+        <select id="strategy">
+            <option value="goldenCross">Golden Cross</option>
+            <!-- Other strategies can be added here -->
+        </select>
+        <div id="strategy-params">
+            <!-- Parameters for the selected strategy will be displayed here -->
+        </div>
+        <label for="allocation">Trade Allocation (%):</label>
+        <input type="number" id="allocation" min="1" max="100" value="100">
+        <label for="stoploss">Stop Loss (%):</label>
+        <input type="number" id="stoploss" min="0" value="10">
+        <label for="takeprofit">Take Profit (%):</label>
+        <input type="number" id="takeprofit" min="0" value="10">
+        <button onclick="backTestStrategy()">Run Backtest</button>
     </div>
 
     <div id="loading">Fetching data...</div>
     <div id="error">An error occurred while fetching data.</div>
+    <!-- Added Strategy Results Container -->
     <div id="strategyResults"></div>
     <div id="results"></div>
     <canvas id="stockChart"></canvas>
@@ -34,6 +54,7 @@
 </body>
 
 </html>
+
 
 
 
