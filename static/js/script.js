@@ -1,5 +1,23 @@
 let myChart = null;
 
+function backTestStrategy() {
+    const symbol = document.getElementById('symbol').value || 'AAPL';
+    const start_date = document.getElementById('start_date').value || '2020-01-01';
+    const end_date = document.getElementById('end_date').value || '2022-01-01';
+
+    fetch(`/backtest?symbol=${symbol}&start_date=${start_date}&end_date=${end_date}`)
+        .then(response => response.json())
+        .then(data => {
+            // Display the results to the user
+            const resultsDiv = document.getElementById('strategyResults');
+            resultsDiv.innerHTML = `
+                Total Profit/Loss: $${data.totalProfit.toFixed(2)}<br>
+                Maximum Drawdown: ${data.maxDrawdown.toFixed(2)}%<br>
+                Annualized Return: ${data.annualizedReturn.toFixed(2)}%
+            `;
+        });
+}
+
 function fetchStockData() {
     const symbol = document.getElementById('symbol').value || 'AAPL';
     const start_date = document.getElementById('start_date').value || '2020-01-01';
