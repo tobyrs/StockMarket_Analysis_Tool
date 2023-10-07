@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
+
 <body>
     <h1>Stock Market Analysis Tool</h1>
 
@@ -19,16 +21,22 @@
         <label for="end_date">End Date:</label>
         <input type="date" id="end_date">
         <button onclick="fetchStockData()">Get Data</button>
+        <!-- Added Backtest Strategy Button -->
+        <button onclick="backTestStrategy()">Backtest Strategy</button>
     </div>
-    
+
     <div id="loading">Fetching data...</div>
     <div id="error">An error occurred while fetching data.</div>
+    <!-- Added Strategy Results Container -->
+    <div id="strategyResults"></div>
     <div id="results"></div>
     <canvas id="stockChart"></canvas>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
+
 </html>
+
 
 
 
