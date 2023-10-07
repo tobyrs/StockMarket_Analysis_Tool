@@ -18,6 +18,7 @@ h1 {
 }
 
 #loading, #error {
+    display: none;
     margin-top: 20px;
     font-size: 18px;
     text-align: center;
