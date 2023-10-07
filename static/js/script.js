@@ -32,6 +32,8 @@ function backTestStrategy() {
 }
 
 
+
+
 function fetchStockData() {
     const symbol = document.getElementById('symbol').value || 'AAPL';
     const start_date = document.getElementById('start_date').value || '2020-01-01';
