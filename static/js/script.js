@@ -1,6 +1,15 @@
 let myChart = null;
 
 function backTestStrategy() {
+    // Logging each element to the console
+    console.log("Symbol Element:", document.getElementById('symbol'));
+    console.log("Start Date Element:", document.getElementById('start_date'));
+    console.log("End Date Element:", document.getElementById('end_date'));
+    console.log("Starting Balance Element:", document.getElementById('starting_balance'));
+    console.log("Trade Allocation Element:", document.getElementById('trade_allocation'));
+    console.log("Stop Loss Element:", document.getElementById('stop_loss'));
+    console.log("Take Profit Element:", document.getElementById('take_profit'));
+    
     const symbol = document.getElementById('symbol').value || 'AAPL';
     const start_date = document.getElementById('start_date').value || '2020-01-01';
     const end_date = document.getElementById('end_date').value || '2022-01-01';
@@ -30,6 +39,7 @@ function backTestStrategy() {
             `;
         });
 }
+
 
 
 
