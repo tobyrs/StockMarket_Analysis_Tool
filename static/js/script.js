@@ -4,11 +4,11 @@ function backTestStrategy() {
     const symbol = document.getElementById('symbol').value || 'AAPL';
     const start_date = document.getElementById('start_date').value || '2020-01-01';
     const end_date = document.getElementById('end_date').value || '2022-01-01';
+    const starting_balance = document.getElementById('starting_balance').value || '100000';
 
-    fetch(`/backtest?symbol=${symbol}&start_date=${start_date}&end_date=${end_date}`)
+    fetch(`/backtest?symbol=${symbol}&start_date=${start_date}&end_date=${end_date}&starting_balance=${starting_balance}`)
         .then(response => response.json())
         .then(data => {
-            // Display the results to the user
             const resultsDiv = document.getElementById('strategyResults');
             const totalProfit = data.totalProfit ? `$${data.totalProfit.toFixed(2)}` : 'N/A';
             const maxDrawdown = data.maxDrawdown ? `${data.maxDrawdown.toFixed(2)}%` : 'N/A';
@@ -21,7 +21,6 @@ function backTestStrategy() {
             `;
         });
 }
-
 
 function fetchStockData() {
     const symbol = document.getElementById('symbol').value || 'AAPL';

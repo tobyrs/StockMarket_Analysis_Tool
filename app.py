@@ -66,12 +66,12 @@ def backtest_strategy():
     symbol = request.args.get('symbol', default='AAPL', type=str)
     start_date = request.args.get('start_date', default='2020-01-01', type=str)
     end_date = request.args.get('end_date', default='2022-01-01', type=str)
+    initial_balance = float(request.args.get('starting_balance', default=100000, type=str))
 
     data = yf.download(symbol, start=start_date, end=end_date)
     add_cross_signals(data)
 
     # Backtesting logic
-    initial_balance = 100000  # Starting with $100,000
     balance = initial_balance
     stock_quantity = 0
     for i in range(1, len(data)):
@@ -87,17 +87,15 @@ def backtest_strategy():
         balance += stock_quantity * data['Close'].iloc[-1]
 
     total_profit = balance - initial_balance
-    # [Calculate maximum drawdown and annualized return]
 
     return jsonify({
-        'totalProfit': total_profit,
-        # 'maxDrawdown': max_drawdown,
-        # 'annualizedReturn': annualized_return
+        'totalProfit': total_profit
     })
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
+
 
 
 
