@@ -5,8 +5,11 @@ function backTestStrategy() {
     const start_date = document.getElementById('start_date').value || '2020-01-01';
     const end_date = document.getElementById('end_date').value || '2022-01-01';
     const starting_balance = document.getElementById('starting_balance').value || '100000';
+    const trade_allocation = document.getElementById('trade_allocation').value || '100';
+    const stop_loss = document.getElementById('stop_loss').value || '0';
+    const take_profit = document.getElementById('take_profit').value || '0';
 
-    fetch(`/backtest?symbol=${symbol}&start_date=${start_date}&end_date=${end_date}&starting_balance=${starting_balance}`)
+    fetch(`/backtest?symbol=${symbol}&start_date=${start_date}&end_date=${end_date}&starting_balance=${starting_balance}&trade_allocation=${trade_allocation}&stop_loss=${stop_loss}&take_profit=${take_profit}`)
         .then(response => response.json())
         .then(data => {
             const resultsDiv = document.getElementById('strategyResults');

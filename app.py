@@ -67,6 +67,9 @@ def backtest_strategy():
     start_date = request.args.get('start_date', default='2020-01-01', type=str)
     end_date = request.args.get('end_date', default='2022-01-01', type=str)
     initial_balance = float(request.args.get('starting_balance', default=100000, type=str))
+    trade_allocation = float(request.args.get('trade_allocation', default='100', type=str)) / 100
+    stop_loss = float(request.args.get('stop_loss', default='0', type=str)) / 100
+    take_profit = float(request.args.get('take_profit', default='0', type=str)) / 100
 
     data = yf.download(symbol, start=start_date, end=end_date)
     add_cross_signals(data)
@@ -74,13 +77,25 @@ def backtest_strategy():
     # Backtesting logic
     balance = initial_balance
     stock_quantity = 0
+    purchase_price = 0  # Keep track of the price we bought the stock at for stop loss/take profit calculations
+
     for i in range(1, len(data)):
         if not np.isnan(data['GoldenCross'][i]):
-            stock_quantity = balance // data['Close'][i]
+            stock_quantity = (balance * trade_allocation) // data['Close'][i]
             balance -= stock_quantity * data['Close'][i]
+            purchase_price = data['Close'][i]
         elif not np.isnan(data['DeathCross'][i]) and stock_quantity > 0:
             balance += stock_quantity * data['Close'][i]
             stock_quantity = 0
+        elif stock_quantity > 0:
+            # Implement Stop Loss
+            if data['Close'][i] <= purchase_price * (1 - stop_loss):
+                balance += stock_quantity * data['Close'][i]
+                stock_quantity = 0
+            # Implement Take Profit
+            elif data['Close'][i] >= purchase_price * (1 + take_profit):
+                balance += stock_quantity * data['Close'][i]
+                stock_quantity = 0
 
     # If still holding stocks, sell them at the last price
     if stock_quantity > 0:
@@ -91,6 +106,7 @@ def backtest_strategy():
     return jsonify({
         'totalProfit': total_profit
     })
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
