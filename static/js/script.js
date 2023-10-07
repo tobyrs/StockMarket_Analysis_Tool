@@ -81,45 +81,26 @@ function renderChart(data) {
                 legend: {
                     display: true,
                     position: 'top',
-                    onClick: function (e, legendItem) {
-                        var index = legendItem.datasetIndex;
-                        var ci = this.chart;
-                        var alreadyHidden = (ci.getDatasetMeta(index).hidden === null) ? false : ci.getDatasetMeta(index).hidden;
-
-                        ci.data.datasets.forEach(function (e, i) {
-                            var meta = ci.getDatasetMeta(i);
-
-                            if (i === index) {
-                                meta.hidden = alreadyHidden ? null : true;
-                            }
-                        });
-
-                        ci.update();
-                    },
                     labels: {
-                        boxWidth: 20,
-                        usePointStyle: true,
-                        padding: 20,
-                        generateLabels: function (chart) {
-                            const items = Chart.overrides.line.plugins.legend.labels.generateLabels.call(this, chart);
-
-                            items.forEach(item => {
-                                item.text = '□ ' + item.text;
+                        generateLabels: function(chart) {
+                            const original = Chart.overrides.line.plugins.legend.labels.generateLabels;
+                            const labels = original.call(this, chart);
+                            labels.forEach(label => {
+                                label.text = (label.hidden ? '□ ' : '■ ') + label.text;
                             });
-
-                            return items;
+                            return labels;
+                        },
+                        onClick: function(e, legendItem, legend) {
+                            const index = legendItem.datasetIndex;
+                            const ci = legend.chart;
+                            ci.data.datasets[index].hidden = !ci.data.datasets[index].hidden;
+                            ci.update();
                         }
-                    },
-                    onHover: function (event, legendItem) {
-                        document.getElementById('stockChart').style.cursor = 'pointer';
-                    },
-                    onLeave: function (event, legendItem) {
-                        document.getElementById('stockChart').style.cursor = 'default';
                     }
                 },
                 tooltip: {
                     callbacks: {
-                        label: function (context) {
+                        label: function(context) {
                             return context.dataset.label + ': ' + context.parsed.y.toFixed(2);
                         }
                     }
@@ -128,3 +109,4 @@ function renderChart(data) {
         }
     });
 }
+
