@@ -38,6 +38,8 @@ function renderChart(data) {
         { label: 'Low', data: labels.map(date => data[date].Low), borderColor: 'red', fill: false },
         { label: 'Close', data: labels.map(date => data[date].Close), borderColor: 'orange', fill: false },
         { label: 'SMA', data: labels.map(date => data[date].SMA), borderColor: 'purple', fill: false, hidden: true },
+        { label: 'Golden Cross', data: labels.map(date => data[date].GoldenCross), borderColor: 'gold', fill: false, pointRadius: 5, pointHoverRadius: 7 },
+        { label: 'Death Cross', data: labels.map(date => data[date].DeathCross), borderColor: 'black', fill: false, pointRadius: 5, pointHoverRadius: 7 },
         { label: 'UpperBB', data: labels.map(date => data[date].UpperBB), borderColor: 'cyan', fill: false, hidden: true },
         { label: 'LowerBB', data: labels.map(date => data[date].LowerBB), borderColor: 'pink', fill: false, hidden: true },
         { label: 'RSI', data: labels.map(date => data[date].RSI), borderColor: 'brown', fill: false, hidden: true }
