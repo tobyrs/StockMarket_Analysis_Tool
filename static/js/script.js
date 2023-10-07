@@ -10,13 +10,18 @@ function backTestStrategy() {
         .then(data => {
             // Display the results to the user
             const resultsDiv = document.getElementById('strategyResults');
+            const totalProfit = data.totalProfit ? `$${data.totalProfit.toFixed(2)}` : 'N/A';
+            const maxDrawdown = data.maxDrawdown ? `${data.maxDrawdown.toFixed(2)}%` : 'N/A';
+            const annualizedReturn = data.annualizedReturn ? `${data.annualizedReturn.toFixed(2)}%` : 'N/A';
+            
             resultsDiv.innerHTML = `
-                Total Profit/Loss: $${data.totalProfit.toFixed(2)}<br>
-                Maximum Drawdown: ${data.maxDrawdown.toFixed(2)}%<br>
-                Annualized Return: ${data.annualizedReturn.toFixed(2)}%
+                Total Profit/Loss: ${totalProfit}<br>
+                Maximum Drawdown: ${maxDrawdown}<br>
+                Annualized Return: ${annualizedReturn}
             `;
         });
 }
+
 
 function fetchStockData() {
     const symbol = document.getElementById('symbol').value || 'AAPL';
