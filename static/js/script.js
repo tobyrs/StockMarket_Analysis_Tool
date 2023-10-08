@@ -120,81 +120,84 @@ function renderChart(data) {
         };
     } else {
         const labels = Object.keys(data);
-        const datasets = [
-            //... (the rest of your datasets)
-        ];
+    const datasets = [
+        { label: 'Open', data: labels.map(date => data[date].Open), borderColor: 'blue', fill: false },
+        { label: 'High', data: labels.map(date => data[date].High), borderColor: 'green', fill: false },
+        { label: 'Low', data: labels.map(date => data[date].Low), borderColor: 'red', fill: false },
+        { label: 'Close', data: labels.map(date => data[date].Close), borderColor: 'orange', fill: false },
+        { label: 'SMA', data: labels.map(date => data[date].SMA), borderColor: 'purple', fill: false, hidden: true },
+        { label: 'Golden Cross', data: labels.map(date => data[date].GoldenCross), borderColor: 'gold', fill: false, pointRadius: 5, pointHoverRadius: 7 },
+        { label: 'Death Cross', data: labels.map(date => data[date].DeathCross), borderColor: 'black', fill: false, pointRadius: 5, pointHoverRadius: 7 },
+        { label: 'UpperBB', data: labels.map(date => data[date].UpperBB), borderColor: 'cyan', fill: false, hidden: true },
+        { label: 'LowerBB', data: labels.map(date => data[date].LowerBB), borderColor: 'pink', fill: false, hidden: true },
+        { label: 'RSI', data: labels.map(date => data[date].RSI), borderColor: 'brown', fill: false, hidden: true }
+    ];
 
-        if (myChart) {
-            myChart.destroy(); // destroy previous chart instance if it exists
-        }
+    if (myChart) {
+        myChart.destroy(); // destroy previous chart instance if it exists
+    }
 
-        const ctx = document.getElementById('stockChart').getContext('2d');
-        myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: datasets
-            },
-            options: {
-                layout: {
-                    padding: {
-                        left: 50,   // Adjust the value as needed
-                        right: 50  // Adjust the value as needed
-                    }
-                },
-                scales: {
-                    x: {
-                        type: 'timeseries',
-                        time: {
-                            unit: 'day',
-                            displayFormats: {
-                                day: 'MMM d'
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Date'
+    const ctx = document.getElementById('stockChart').getContext('2d');
+    myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'timeseries',
+                    time: {
+                        unit: 'day',
+                        displayFormats: {
+                            day: 'MMM d'
                         }
                     },
-                    y: {
-                        beginAtZero: false,
-                        title: {
-                            display: true,
-                            text: 'Value'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
+                    title: {
                         display: true,
-                        position: 'top',
-                        labels: {
-                            font: {
-                                weight: 'normal'
-                            },
-                            onHover: function(event, legendItem) {
-                                this.chart.legend.legendItems[legendItem.index].font.weight = 'bold';
-                                this.chart.draw();
-                            },
-                            onLeave: function(event, legendItem) {
-                                this.chart.legend.legendItems[legendItem.index].font.weight = 'normal';
-                                this.chart.draw();
-                            }
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'Value'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        font: {
+                            weight: 'normal'
+                        },
+                        onHover: function(event, legendItem) {
+                            this.chart.legend.legendItems[legendItem.index].font.weight = 'bold';
+                            this.chart.draw();
+                        },
+                        onLeave: function(event, legendItem) {
+                            this.chart.legend.legendItems[legendItem.index].font.weight = 'normal';
+                            this.chart.draw();
                         }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + context.parsed.y.toFixed(2);
-                            }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y.toFixed(2);
                         }
                     }
                 }
             }
-        });
-    }
-}
+        }
+    });
 
+    }
+    }
 //sliders 
 function updateAllocationValue(val) {
     document.getElementById('allocationValue').innerText = val;
