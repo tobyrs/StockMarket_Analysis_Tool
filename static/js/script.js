@@ -14,9 +14,18 @@ function debounce(func, wait) {
 }
 
 // Event Listeners for inputs and sliders
-document.getElementById('symbol').addEventListener('change', debounce(fetchStockData, 500));
-document.getElementById('start_date').addEventListener('change', debounce(fetchStockData, 500));
-document.getElementById('end_date').addEventListener('change', debounce(fetchStockData, 500));
+document.getElementById('symbol').addEventListener('change', function() {
+    debounce(fetchStockData, 500)();
+    debounce(backTestStrategy, 500)();
+});
+document.getElementById('start_date').addEventListener('change', function() {
+    debounce(fetchStockData, 500)();
+    debounce(backTestStrategy, 500)();
+});
+document.getElementById('end_date').addEventListener('change', function() {
+    debounce(fetchStockData, 500)();
+    debounce(backTestStrategy, 500)();
+});
 
 document.getElementById('allocation').addEventListener('change', function() {
     updateAllocationValue(this.value);
