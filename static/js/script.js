@@ -144,3 +144,15 @@ function renderChart(data) {
         }
     });
 }
+//sliders 
+function updateAllocationValue(val) {
+    document.getElementById('allocationValue').innerText = val;
+}
+
+function updateStopLossValue(val) {
+    document.getElementById('stopLossValue').innerText = val;
+}
+
+function updateTakeProfitValue(val) {
+    document.getElementById('takeProfitValue').innerText = val;
+}

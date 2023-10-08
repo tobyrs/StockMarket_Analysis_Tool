@@ -37,11 +37,14 @@
         <!-- Parameters for the selected strategy will be displayed here -->
     </div>
     <label for="allocation">Trade Allocation (%):</label>
-    <input type="number" id="allocation" min="1" max="100" value="100">
+    <input type="range" id="allocation" min="1" max="100" value="100" oninput="updateAllocationValue(this.value)">
+    <span id="allocationValue">100</span>%
     <label for="stoploss">Stop Loss (%):</label>
-    <input type="number" id="stoploss" min="0" value="10">
+    <input type="range" id="stoploss" min="0" max="100" value="10" oninput="updateStopLossValue(this.value)">
+    <span id="stopLossValue">10</span>%
     <label for="takeprofit">Take Profit (%):</label>
-    <input type="number" id="takeprofit" min="0" value="10">
+    <input type="range" id="takeprofit" min="0" max="100" value="10" oninput="updateTakeProfitValue(this.value)">
+    <span id="takeProfitValue">10</span>%
     <button onclick="backTestStrategy()">Run Backtest</button>
 </div>
 
