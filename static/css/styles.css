@@ -843,17 +843,7 @@ canvas {
   }
 
 
-nav {
-    padding: 20px 0;
-    background-color: #f4f4f4;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.text-logo {
-    margin-left: 20px;
-}
-.nav__link--list {
-    margin-right: 20px;
-}
+
 
 /* Overriding the input styles */
 input[type="text"], input[type="date"], input[type="number"], input[type="range"], select {
