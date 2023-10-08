@@ -1,5 +1,39 @@
 let myChart = null;
 
+// Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            func.apply(context, args);
+        }, wait);
+    };
+}
+
+// Event Listeners
+document.getElementById('symbol').addEventListener('input', debounce(fetchStockData, 500));
+document.getElementById('start_date').addEventListener('input', debounce(fetchStockData, 500));
+document.getElementById('end_date').addEventListener('input', debounce(fetchStockData, 500));
+
+document.getElementById('allocation').addEventListener('input', function() {
+    updateAllocationValue(this.value);
+    debounce(backTestStrategy, 500)();
+});
+
+document.getElementById('stoploss').addEventListener('input', function() {
+    updateStopLossValue(this.value);
+    debounce(backTestStrategy, 500)();
+});
+
+document.getElementById('takeprofit').addEventListener('input', function() {
+    updateTakeProfitValue(this.value);
+    debounce(backTestStrategy, 500)();
+});
+
+
 function backTestStrategy() {
     const symbol = document.getElementById('symbol').value || 'AAPL';
     const start_date = document.getElementById('start_date').value || '2020-01-01';
@@ -30,10 +64,6 @@ function backTestStrategy() {
             `;
         });
 }
-
-
-
-
 
 
 function fetchStockData() {
