@@ -36,39 +36,42 @@
 
 
 
-    <div class="input-container">
-        <label for="symbol">Stock Symbol:</label>
-        <input type="text" id="symbol" placeholder="e.g. AAPL">
-        <label for="start_date">Start Date:</label>
-        <input type="date" id="start_date">
-        <label for="end_date">End Date:</label>
-        <input type="date" id="end_date">
-        <button onclick="fetchStockData()">Get Data</button>
-    </div>
-
-    <!-- Backtesting Configuration Panel -->
-    <div class="backtest-container">
-        <h2>Backtesting Configuration</h2>
-        <label for="starting_balance">Starting Balance ($):</label>
-        <input type="number" id="starting_balance" min="1" value="100000">
-        <label for="strategy">Select Strategy:</label>
-        <select id="strategy">
-            <option value="goldenCross">Golden Cross</option>
-            <!-- Other strategies can be added here -->
-        </select>
-        <div id="strategy-params">
-            <!-- Parameters for the selected strategy will be displayed here -->
+    <div class="main-content">
+        <!-- Input Fields Section -->
+        <div class="input-container">
+            <label for="symbol">Stock Symbol:</label>
+            <input type="text" id="symbol" placeholder="e.g. AAPL">
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date">
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date">
+            <button onclick="fetchStockData()">Get Data</button>
         </div>
-        <label for="allocation">Trade Allocation (%):</label>
-        <input type="range" id="allocation" min="1" max="100" value="100" oninput="updateAllocationValue(this.value)">
-        <span id="allocationValue">100</span>%
-        <label for="stoploss">Stop Loss (%):</label>
-        <input type="range" id="stoploss" min="0" max="100" value="10" oninput="updateStopLossValue(this.value)">
-        <span id="stopLossValue">10</span>%
-        <label for="takeprofit">Take Profit (%):</label>
-        <input type="range" id="takeprofit" min="0" max="100" value="10" oninput="updateTakeProfitValue(this.value)">
-        <span id="takeProfitValue">10</span>%
-        <button onclick="backTestStrategy()">Run Backtest</button>
+    
+        <!-- Backtesting Configuration Panel -->
+        <div class="backtest-container">
+            <h2>Backtesting Configuration</h2>
+            <label for="starting_balance">Starting Balance ($):</label>
+            <input type="number" id="starting_balance" min="1" value="100000">
+            <label for="strategy">Select Strategy:</label>
+            <select id="strategy">
+                <option value="goldenCross">Golden Cross</option>
+                <!-- Other strategies can be added here -->
+            </select>
+            <div id="strategy-params">
+                <!-- Parameters for the selected strategy will be displayed here -->
+            </div>
+            <label for="allocation">Trade Allocation (%):</label>
+            <input type="range" id="allocation" min="1" max="100" value="100" oninput="updateAllocationValue(this.value)">
+            <span id="allocationValue">100</span>%
+            <label for="stoploss">Stop Loss (%):</label>
+            <input type="range" id="stoploss" min="0" max="100" value="10" oninput="updateStopLossValue(this.value)">
+            <span id="stopLossValue">10</span>%
+            <label for="takeprofit">Take Profit (%):</label>
+            <input type="range" id="takeprofit" min="0" max="100" value="10" oninput="updateTakeProfitValue(this.value)">
+            <span id="takeProfitValue">10</span>%
+            <button onclick="backTestStrategy()">Run Backtest</button>
+        </div>
     </div>
 
     <div id="loading">Fetching data...</div>

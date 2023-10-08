@@ -852,6 +852,31 @@ input[type="text"], input[type="date"], input[type="number"], input[type="range"
 }
 
 
+.main-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.input-container {
+    flex: 1;
+    max-width: calc(50% - 10px);
+}
+
+.backtest-container {
+    flex: 1;
+    max-width: calc(50% - 10px);
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+    .input-container,
+    .backtest-container {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+}
 
 
 
