@@ -109,10 +109,10 @@ function renderChart(data) {
     if (!data || Object.keys(data).length === 0) {
         // If there's no data, render an empty placeholder chart
         data = {
-            labels: [],
+            labels: ['Placeholder Start', 'Placeholder End'],
             datasets: [{
                 label: 'No Data',
-                data: [],
+                data: [0, 1],
                 borderColor: 'rgba(0, 123, 255, 1)',
                 borderWidth: 2,
                 fill: false
