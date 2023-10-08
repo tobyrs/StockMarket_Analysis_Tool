@@ -888,6 +888,31 @@ input[type="text"], input[type="date"], input[type="number"], input[type="range"
 }
 
 
+/* Style for the slider containers */
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Style to ensure that percentage is right next to the slider */
+.slider-container span {
+    margin: 0;
+}
+
+/* Responsive styles for the sliders */
+@media (max-width: 480px) {
+    .slider-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .slider-container input[type="range"] {
+        width: 100%;
+    }
+    .slider-container span {
+        align-self: flex-end;
+    }
+}
 
 
 

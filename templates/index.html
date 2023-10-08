@@ -61,17 +61,28 @@
             <div id="strategy-params">
                 <!-- Parameters for the selected strategy will be displayed here -->
             </div>
+        
             <label for="allocation">Trade Allocation (%):</label>
-            <input type="range" id="allocation" min="1" max="100" value="100" oninput="updateAllocationValue(this.value)">
-            <span id="allocationValue">100</span>%
+            <div class="slider-container">
+                <input type="range" id="allocation" min="1" max="100" value="100" oninput="updateAllocationValue(this.value)">
+                <span id="allocationValue">100</span>%
+            </div>
+        
             <label for="stoploss">Stop Loss (%):</label>
-            <input type="range" id="stoploss" min="0" max="100" value="10" oninput="updateStopLossValue(this.value)">
-            <span id="stopLossValue">10</span>%
+            <div class="slider-container">
+                <input type="range" id="stoploss" min="0" max="100" value="10" oninput="updateStopLossValue(this.value)">
+                <span id="stopLossValue">10</span>%
+            </div>
+        
             <label for="takeprofit">Take Profit (%):</label>
-            <input type="range" id="takeprofit" min="0" max="100" value="10" oninput="updateTakeProfitValue(this.value)">
-            <span id="takeProfitValue">10</span>%
+            <div class="slider-container">
+                <input type="range" id="takeprofit" min="0" max="100" value="10" oninput="updateTakeProfitValue(this.value)">
+                <span id="takeProfitValue">10</span>%
+            </div>
+        
             <button onclick="backTestStrategy()">Run Backtest</button>
         </div>
+        
     </div>
 
     <div id="loading">Fetching data...</div>
