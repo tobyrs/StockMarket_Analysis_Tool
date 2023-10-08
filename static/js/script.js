@@ -13,22 +13,22 @@ function debounce(func, wait) {
     };
 }
 
-// Event Listeners
-document.getElementById('symbol').addEventListener('input', debounce(fetchStockData, 500));
-document.getElementById('start_date').addEventListener('input', debounce(fetchStockData, 500));
-document.getElementById('end_date').addEventListener('input', debounce(fetchStockData, 500));
+// Event Listeners for inputs and sliders
+document.getElementById('symbol').addEventListener('change', debounce(fetchStockData, 500));
+document.getElementById('start_date').addEventListener('change', debounce(fetchStockData, 500));
+document.getElementById('end_date').addEventListener('change', debounce(fetchStockData, 500));
 
-document.getElementById('allocation').addEventListener('input', function() {
+document.getElementById('allocation').addEventListener('change', function() {
     updateAllocationValue(this.value);
     debounce(backTestStrategy, 500)();
 });
 
-document.getElementById('stoploss').addEventListener('input', function() {
+document.getElementById('stoploss').addEventListener('change', function() {
     updateStopLossValue(this.value);
     debounce(backTestStrategy, 500)();
 });
 
-document.getElementById('takeprofit').addEventListener('input', function() {
+document.getElementById('takeprofit').addEventListener('change', function() {
     updateTakeProfitValue(this.value);
     debounce(backTestStrategy, 500)();
 });
