@@ -862,11 +862,8 @@ input[type="text"], input[type="date"], input[type="number"], input[type="range"
 }
 
 
-/* Setting the width of the nav items to spread out and cover the entire width */
-.nav__link--list {
-    justify-content: space-between;
-    width: 100%;
-}
+
+
 
 
 
