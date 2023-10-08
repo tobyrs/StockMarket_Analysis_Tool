@@ -91,6 +91,9 @@ canvas {
 
 
 
+
+
+
 * {
     margin: 0;
     padding: 0;
@@ -838,3 +841,21 @@ canvas {
       padding: 40px;
     }
   }
+
+
+nav {
+    padding: 20px 0;
+    background-color: #f4f4f4;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.text-logo {
+    margin-left: 20px;
+}
+.nav__link--list {
+    margin-right: 20px;
+}
+
+
+
+
+
