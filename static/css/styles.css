@@ -855,6 +855,25 @@ nav {
     margin-right: 20px;
 }
 
+/* Overriding the input styles */
+input[type="text"], input[type="date"], input[type="number"], input[type="range"], select {
+    background-color: #f4f4f4;
+    width: 200px; /* fixed width */
+}
+
+/* Making the navbar responsive */
+nav {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); /* Adding a shadow for better appearance */
+}
+
+/* Setting the width of the nav items to spread out and cover the entire width */
+.nav__link--list {
+    justify-content: space-between;
+    width: 100%;
+}
 
 
 
