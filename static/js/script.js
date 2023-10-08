@@ -106,7 +106,20 @@ function fetchStockData() {
 }
 
 function renderChart(data) {
-    const labels = Object.keys(data);
+    if (!data || Object.keys(data).length === 0) {
+        // If there's no data, render an empty placeholder chart
+        data = {
+            labels: [],
+            datasets: [{
+                label: 'No Data',
+                data: [],
+                borderColor: 'rgba(0, 123, 255, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        };
+    } else {
+        const labels = Object.keys(data);
     const datasets = [
         { label: 'Open', data: labels.map(date => data[date].Open), borderColor: 'blue', fill: false },
         { label: 'High', data: labels.map(date => data[date].High), borderColor: 'green', fill: false },
@@ -182,7 +195,9 @@ function renderChart(data) {
             }
         }
     });
-}
+
+    }
+    }
 //sliders 
 function updateAllocationValue(val) {
     document.getElementById('allocationValue').innerText = val;
@@ -195,3 +210,6 @@ function updateStopLossValue(val) {
 function updateTakeProfitValue(val) {
     document.getElementById('takeProfitValue').innerText = val;
 }
+
+// Render an empty chart on initial page load
+renderChart(null);
